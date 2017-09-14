@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: web
+spec:
+  replicas: 1
+  serviceName: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - env:
+        - name: CASSANDRA_SERVICE_NAME
+          value: _native._tcp.cassandra.default.svc.cluster.local
+        - name: WEB_BIND_PORT
+          value: '9000'
+        - name: WEB_BIND_IP
+          value: 0.0.0.0
+        image: registry.ng.bluemix.net/chirper/front-end:1.0-SNAPSHOT
+        name: web
+        ports:
+        - containerPort: 9000
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 9000
+          initialDelaySeconds: 5
+          periodSeconds: 5

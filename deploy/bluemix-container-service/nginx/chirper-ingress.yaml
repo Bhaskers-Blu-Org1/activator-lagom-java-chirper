@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: chirper-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /api/activity
+        backend:
+          serviceName: activityservice
+          servicePort: 9000
+      - path: /api/users
+        backend:
+          serviceName: friendservice
+          servicePort: 9000
+      - path: /api/chirps
+        backend:
+          serviceName: chirpservice
+          servicePort: 9000
+      - backend:
+          serviceName: web
+          servicePort: 9000
+    host: chirper.us-south.containers.mybluemix.net
+  tls:
+  - hosts:
+    - chirper.us-south.containers.mybluemix.net
+    secretName: chirper
